@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.TestDao">
+
+    <update id="updateInfo" parameterType="java.lang.String">
+        update aa
+        set USER_CODE="ssaadss"
+        where  USER_NAME=#{1,jdbcType=VARCHAR}
+    </update>
+</mapper>

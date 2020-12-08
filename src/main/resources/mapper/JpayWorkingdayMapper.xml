@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.JpayWorkingDayMapper">
+  <select id="selectWorkDay" resultType="com.example.demo.bean.JpayWorkingDayResInfo">
+    select
+    wh_date as whDate,
+    wh_status as whStatus,
+    status as whStatus,
+    create_time as createTime,
+    create_user as createUser,
+    update_time as updateTime,
+    update_user as updateUser,
+    remark as remark
+    FROM
+    t_jpay_workingday_holiday
+  </select>
+</mapper>
