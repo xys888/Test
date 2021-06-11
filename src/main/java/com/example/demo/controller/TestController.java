@@ -31,6 +31,12 @@ public class TestController {
         return "success";
     }
 
+    @RequestMapping(value = "/test6", method = RequestMethod.POST)
+    public String test6(){
+        jpayWorkingDayService.dealAmsCompsntasklockStatus();
+        return "success";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/test3", method = RequestMethod.POST)
     public Map<String, String> get(String timess,Integer args){
@@ -41,5 +47,10 @@ public class TestController {
     @RequestMapping(value = "/test4", method = RequestMethod.POST)
     public void getCss(){
         jpayWorkingDayService.getCss();
+    }
+
+    @RequestMapping(value = "/test9", method = RequestMethod.POST)
+    public void getCss1(){
+        jpayWorkingDayService.transClearFile();
     }
 }

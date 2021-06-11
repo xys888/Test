@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.DayBalancePushDao">
+
+    <insert id="updateDayBalancePushDao2">
+      INSERT into t_deposit_balance_daily_info_copy select * from t_deposit_balance_daily_info
+    </insert>
+    <update id="updateDayBalancePushDao1">
+      TRUNCATE TABLE t_deposit_balance_daily_info_copy;
+    </update>
+    <update id="updateDayBalancePushDao3">
+      TRUNCATE TABLE t_deposit_balance_daily_info;
+    </update>
+</mapper>

@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.JpayWorkingDayMapper">
+
+  <resultMap id="BaseResultMap" type="com.example.demo.util.AccountBillTradeBlotter" >
+    <id column="ABTB_SEQ" property="abtbSeq" jdbcType="VARCHAR" />
+    <id column="MAIN_ACC_TRANS_TXN" property="mainAccTransTxn" jdbcType="VARCHAR" />
+    <result column="BUSI_TYPE" property="busiType" jdbcType="VARCHAR" />
+    <result column="BUSI_DATE" property="busiDate" jdbcType="DATE" />
+    <result column="BUSI_SYS" property="busiSys" jdbcType="VARCHAR" />
+    <result column="BUSI_CREATE_TIME" property="busiCreateTime" jdbcType="TIMESTAMP" />
+    <result column="BUSI_PROGRESS" property="busiProgress" jdbcType="TINYINT" />
+    <result column="BUSI_REASON" property="busiReason" jdbcType="VARCHAR" />
+    <result column="BUSI_OBJ" property="busiObj" jdbcType="VARCHAR" />
+    <result column="ACC_CREATE_TIME" property="accCreateTime" jdbcType="TIMESTAMP" />
+    <result column="ACC_UPDATE_TIME" property="accUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="BUSI_CALLBACK_URL" property="busiCallbackUrl" jdbcType="VARCHAR" />
+    <result column="BANK_CARD" property="bankCard" jdbcType="VARCHAR" />
+    <result column="BANK_SYS_DATE" property="bankSysDate" jdbcType="VARCHAR" />
+    <result column="BANK_SYS_TIME" property="bankSysTime" jdbcType="VARCHAR" />
+    <result column="BANK_DEAL_STATUS" property="bankDealStatus" jdbcType="VARCHAR" />
+    <result column="BANK_DEAL_CODE" property="bankDealCode" jdbcType="VARCHAR" />
+    <result column="BANK_DEAL_MSG" property="bankDealMsg" jdbcType="VARCHAR" />
+    <result column="BANK_SUMMARY" property="bankSummary" jdbcType="VARCHAR" />
+    <result column="OUT_SYS_CODE" property="outSysCode" jdbcType="VARCHAR" />
+    <result column="OUT_CHN_CODE" property="outChnCode" jdbcType="VARCHAR" />
+    <result column="DEPO_NO" property="depoNo" jdbcType="VARCHAR" />
+    <result column="SUB_DEPO_NO" property="subDepoNo" jdbcType="VARCHAR" />
+    <result column="AMT" property="amt" jdbcType="DECIMAL" />
+    <result column="OPPO_DEPO_NO" property="oppoDepoNo" jdbcType="VARCHAR" />
+    <result column="OPPO_SUB_DEPO_NO" property="oppoSubDepoNo" jdbcType="VARCHAR" />
+    <result column="TRANS_TYPE" property="transType" jdbcType="TINYINT" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="BANK_TRANS_STS" property="bankTransSts" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ABTB_SEQ, MAIN_ACC_TRANS_TXN, BUSI_TYPE, BUSI_DATE, BUSI_SYS, BUSI_CREATE_TIME, BUSI_PROGRESS, BUSI_REASON,
+    BUSI_OBJ, ACC_CREATE_TIME, ACC_UPDATE_TIME, STATUS, BUSI_CALLBACK_URL, BANK_CARD,
+    BANK_SYS_DATE, BANK_SYS_TIME, BANK_DEAL_STATUS, BANK_DEAL_CODE, BANK_DEAL_MSG, BANK_SUMMARY,
+    OUT_SYS_CODE, OUT_CHN_CODE, DEPO_NO, SUB_DEPO_NO, AMT, OPPO_DEPO_NO, OPPO_SUB_DEPO_NO,
+    TRANS_TYPE, REMARK, BANK_TRANS_STS
+  </sql>
   <select id="selectWorkDay" resultType="com.example.demo.bean.JpayWorkingDayResInfo">
     select
     wh_date as whDate,
@@ -13,5 +53,27 @@
     remark as remark
     FROM
     t_jpay_workingday_holiday
+  </select>
+  <update id="dealAmsCompsntasklockStatus">
+        update t_ams_compsn_task_lock
+        set LOCK_STS = 'Y'
+        where TASK_TYPE = 'daily'
+    </update>
+
+  <select id="selectRechargeByDate" fetchSize="-2147483648" resultMap="BaseResultMap" parameterType="java.lang.String" >>
+    select
+    <include refid="Base_Column_List" />
+    from t_account_bill_trade_blotter
+    where 1 = 1
+    <if test="busiCreateTimeBegin != null" >
+      <![CDATA[ and ((BUSI_CREATE_TIME >= #{busiCreateTimeBegin}]]>
+    </if>
+    <if test="busiCreateTimeEnd != null" >
+      <![CDATA[ and BUSI_CREATE_TIME < #{busiCreateTimeEnd})]]>
+    </if>
+    <if test="accUpdateTime != null and accUpdateTimeEnd !=null" >
+      <![CDATA[ OR (ACC_UPDATE_TIME > #{accUpdateTime} and ACC_UPDATE_TIME < #{accUpdateTimeEnd})) ]]>
+    </if>
+    AND TRANS_TYPE = 1
   </select>
 </mapper>

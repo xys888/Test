@@ -38,6 +38,11 @@ public class JpayWorkingDayService {
             e.printStackTrace();
         }
     }
+    public void dealAmsCompsntasklockStatus() {
+        jpayWorkingDayMapper.dealAmsCompsntasklockStatus();
+
+    }
+
 
     public Map<String, String> get(String timess) {
         //定义空对象
@@ -50,7 +55,7 @@ public class JpayWorkingDayService {
         }
         //定义存放对象的集合List
         List<JpayWorkingDayResInfo> newHolidayList = new ArrayList<>();
-        Map<String,String>  map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         //将字符串转换成JSON格式的字符串
         JSONArray infos = JSONArray.parseArray(holidayinfoList);
         for (int i = 0; i < infos.size(); i++) {
@@ -63,13 +68,13 @@ public class JpayWorkingDayService {
         }
         Date workTime = null;
         //格式化时间格式
-        if(isExistence(timess,newHolidayList)){
-              workTime = getWorkTime(timess, newHolidayList);
-        }else if(isMonday(timess)) {
+        if (isExistence(timess, newHolidayList)) {
+            workTime = getWorkTime(timess, newHolidayList);
+        } else if (isMonday(timess)) {
             try {
                 Calendar instance = Calendar.getInstance();
                 instance.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(timess));
-                instance.add(Calendar.DATE,+3);
+                instance.add(Calendar.DATE, +3);
                 workTime = instance.getTime();
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -110,6 +115,10 @@ public class JpayWorkingDayService {
         return parse;
     }
 
+
+    public void transClearFile(){
+        jpayWorkingDayMapper.selectRechargeByDate("2021-03-01","2021-03-04","2021-03-01","2021-03-02");
+    }
     /**
      * 判断当前是否是周六或者周日
      * 如果是的话向前推一天
@@ -156,27 +165,28 @@ public class JpayWorkingDayService {
 
     /**
      * 判断当前时间是否是列表中的时间
+     *
      * @param timess
      * @param newHolidayList
      * @return
      */
-    private static Boolean isExistence(String timess,List<JpayWorkingDayResInfo> newHolidayList){
+    private static Boolean isExistence(String timess, List<JpayWorkingDayResInfo> newHolidayList) {
         //迭代出从缓存中拿出来的集合
         //判断当前时间是否是缓存中的存褚时间
         List<String> list = new ArrayList<>();
-       for(int i=0;i<newHolidayList.size();i++){
-           Date whDate = newHolidayList.get(i).getWhDate();
-           list.add(new SimpleDateFormat("yyyy-MM-dd").format(whDate));
-       }
-        if(list.contains(timess)){
+        for (int i = 0; i < newHolidayList.size(); i++) {
+            Date whDate = newHolidayList.get(i).getWhDate();
+            list.add(new SimpleDateFormat("yyyy-MM-dd").format(whDate));
+        }
+        if (list.contains(timess)) {
             return true;
         }
         return false;
     }
 
-    private static Boolean isMonday(String timess){
-        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date= null;
+    private static Boolean isMonday(String timess) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
         try {
             date = sdf.parse(timess);
         } catch (ParseException e) {
@@ -184,7 +194,7 @@ public class JpayWorkingDayService {
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY){
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
             return true;
         }
         return false;
